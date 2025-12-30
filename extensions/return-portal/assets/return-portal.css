@@ -1,0 +1,509 @@
+/* Returns Hub - Return Portal Theme Extension */
+/* Design: Clean, minimal, high-end aesthetic following shadcn/ui principles */
+
+.return-portal {
+  --rp-primary: var(--primary-color, #000000);
+  --rp-primary-foreground: #ffffff;
+  --rp-background: #ffffff;
+  --rp-foreground: #0a0a0a;
+  --rp-muted: #f4f4f5;
+  --rp-muted-foreground: #71717a;
+  --rp-border: #e4e4e7;
+  --rp-input: #e4e4e7;
+  --rp-ring: var(--primary-color, #000000);
+  --rp-destructive: #ef4444;
+  --rp-success: #22c55e;
+  --rp-radius: 0.5rem;
+  --rp-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --rp-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  color: var(--rp-foreground);
+}
+
+/* Typography */
+.return-portal__heading {
+  font-size: 1.875rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
+}
+
+.return-portal__subheading {
+  font-size: 1rem;
+  color: var(--rp-muted-foreground);
+  margin: 0 0 2rem 0;
+  line-height: 1.5;
+}
+
+/* Card Container */
+.return-portal__card {
+  background: var(--rp-background);
+  border: 1px solid var(--rp-border);
+  border-radius: var(--rp-radius);
+  padding: 1.5rem;
+  box-shadow: var(--rp-shadow);
+}
+
+.return-portal__card + .return-portal__card {
+  margin-top: 1rem;
+}
+
+/* Form Elements */
+.return-portal__form-group {
+  margin-bottom: 1.25rem;
+}
+
+.return-portal__form-group:last-child {
+  margin-bottom: 0;
+}
+
+.return-portal__label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--rp-foreground);
+}
+
+.return-portal__input,
+.return-portal__select,
+.return-portal__textarea {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--rp-foreground);
+  background: var(--rp-background);
+  border: 1px solid var(--rp-input);
+  border-radius: var(--rp-radius);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  box-sizing: border-box;
+}
+
+.return-portal__input:focus,
+.return-portal__select:focus,
+.return-portal__textarea:focus {
+  outline: none;
+  border-color: var(--rp-ring);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+.return-portal__input::placeholder,
+.return-portal__textarea::placeholder {
+  color: var(--rp-muted-foreground);
+}
+
+.return-portal__textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.return-portal__select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2371717a'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+  padding-right: 2.5rem;
+}
+
+/* Buttons */
+.return-portal__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--rp-primary-foreground);
+  background: var(--rp-primary);
+  border: none;
+  border-radius: var(--rp-radius);
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+}
+
+.return-portal__button:hover {
+  opacity: 0.9;
+}
+
+.return-portal__button:active {
+  transform: scale(0.98);
+}
+
+.return-portal__button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.return-portal__button--secondary {
+  background: var(--rp-muted);
+  color: var(--rp-foreground);
+}
+
+.return-portal__button--secondary:hover {
+  background: var(--rp-border);
+}
+
+.return-portal__button--ghost {
+  background: transparent;
+  color: var(--rp-foreground);
+}
+
+.return-portal__button--ghost:hover {
+  background: var(--rp-muted);
+}
+
+/* Loading Spinner */
+.return-portal__spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: return-portal-spin 0.6s linear infinite;
+}
+
+@keyframes return-portal-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Order Items */
+.return-portal__order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--rp-border);
+}
+
+.return-portal__order-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+}
+
+.return-portal__order-date {
+  font-size: 0.875rem;
+  color: var(--rp-muted-foreground);
+  margin: 0;
+}
+
+.return-portal__items-heading {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--rp-muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 1rem 0;
+}
+
+.return-portal__item {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--rp-border);
+}
+
+.return-portal__item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.return-portal__item-checkbox {
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+
+.return-portal__item-checkbox input {
+  width: 1.125rem;
+  height: 1.125rem;
+  accent-color: var(--rp-primary);
+  cursor: pointer;
+}
+
+.return-portal__item-image {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: calc(var(--rp-radius) - 2px);
+  background: var(--rp-muted);
+}
+
+.return-portal__item-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.return-portal__item-title {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  margin: 0 0 0.25rem 0;
+  line-height: 1.3;
+}
+
+.return-portal__item-variant {
+  font-size: 0.8125rem;
+  color: var(--rp-muted-foreground);
+  margin: 0 0 0.5rem 0;
+}
+
+.return-portal__item-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.8125rem;
+  color: var(--rp-muted-foreground);
+}
+
+.return-portal__item-fields {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--rp-border);
+}
+
+.return-portal__item-fields .return-portal__form-group {
+  margin-bottom: 0.75rem;
+}
+
+/* Photo Upload */
+.return-portal__photo-upload {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.return-portal__photo-upload-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border: 2px dashed var(--rp-border);
+  border-radius: var(--rp-radius);
+  background: var(--rp-muted);
+  color: var(--rp-muted-foreground);
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.return-portal__photo-upload-btn:hover {
+  border-color: var(--rp-primary);
+}
+
+.return-portal__photo-preview {
+  position: relative;
+  width: 64px;
+  height: 64px;
+}
+
+.return-portal__photo-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--rp-radius);
+}
+
+.return-portal__photo-remove {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--rp-destructive);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+/* Summary */
+.return-portal__summary {
+  background: var(--rp-muted);
+  border-radius: var(--rp-radius);
+  padding: 1rem;
+  margin-top: 1.5rem;
+}
+
+.return-portal__summary-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+}
+
+.return-portal__summary-count {
+  font-size: 0.875rem;
+  color: var(--rp-muted-foreground);
+  margin: 0;
+}
+
+/* Confirmation */
+.return-portal__confirmation {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.return-portal__confirmation-icon {
+  width: 4rem;
+  height: 4rem;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(34, 197, 94, 0.1);
+  border-radius: 50%;
+  color: var(--rp-success);
+}
+
+.return-portal__confirmation-icon svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+.return-portal__confirmation-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+}
+
+.return-portal__confirmation-message {
+  font-size: 0.9375rem;
+  color: var(--rp-muted-foreground);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.5;
+}
+
+.return-portal__confirmation-id {
+  font-size: 0.8125rem;
+  color: var(--rp-muted-foreground);
+  font-family: monospace;
+  margin: 0 0 1.5rem 0;
+}
+
+.return-portal__next-steps {
+  text-align: left;
+  background: var(--rp-muted);
+  border-radius: var(--rp-radius);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.return-portal__next-steps-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem 0;
+}
+
+.return-portal__next-steps-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  font-size: 0.875rem;
+  color: var(--rp-muted-foreground);
+  line-height: 1.6;
+}
+
+.return-portal__next-steps-list li {
+  margin-bottom: 0.25rem;
+}
+
+.return-portal__next-steps-list li:last-child {
+  margin-bottom: 0;
+}
+
+/* Error Messages */
+.return-portal__error {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--rp-destructive);
+  padding: 0.75rem 1rem;
+  border-radius: var(--rp-radius);
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.return-portal__error-icon {
+  flex-shrink: 0;
+}
+
+/* Policy Link */
+.return-portal__policy {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.return-portal__policy-link {
+  font-size: 0.875rem;
+  color: var(--rp-muted-foreground);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.return-portal__policy-link:hover {
+  color: var(--rp-foreground);
+}
+
+.return-portal__policy-notice {
+  font-size: 0.8125rem;
+  color: var(--rp-muted-foreground);
+  margin-top: 0.5rem;
+}
+
+/* Animations */
+.return-portal__fade-in {
+  animation: return-portal-fade-in 0.3s ease;
+}
+
+@keyframes return-portal-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hidden utility */
+.return-portal__hidden {
+  display: none !important;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .return-portal {
+    padding: 1.5rem 1rem;
+  }
+
+  .return-portal__heading {
+    font-size: 1.5rem;
+  }
+
+  .return-portal__item {
+    flex-wrap: wrap;
+  }
+
+  .return-portal__item-image {
+    width: 48px;
+    height: 48px;
+  }
+}

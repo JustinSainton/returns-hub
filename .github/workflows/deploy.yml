@@ -1,0 +1,54 @@
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    branches: [main]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to Fly.io
+    runs-on: ubuntu-latest
+    # Only deploy if CI passed (for workflow_run) or manual trigger
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    
+    environment:
+      name: ${{ github.event.inputs.environment || 'production' }}
+      url: https://returns-hub.fly.dev
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Fly CLI
+        uses: superfly/flyctl-actions/setup-flyctl@master
+      
+      - name: Deploy to Fly.io
+        run: flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      
+      - name: Run database migrations
+        run: flyctl ssh console -C "npx prisma migrate deploy"
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      
+      - name: Health check
+        run: |
+          sleep 10
+          curl -f https://returns-hub.fly.dev/api/health || exit 1
+        continue-on-error: true

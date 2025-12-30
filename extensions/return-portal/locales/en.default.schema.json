@@ -1,0 +1,24 @@
+{
+  "blocks": {
+    "return-portal": {
+      "name": "Return Portal",
+      "settings": {
+        "heading": {
+          "label": "Heading"
+        },
+        "subheading": {
+          "label": "Subheading"
+        },
+        "button_text": {
+          "label": "Button Text"
+        },
+        "primary_color": {
+          "label": "Primary Color"
+        },
+        "show_return_policy": {
+          "label": "Show Return Policy Link"
+        }
+      }
+    }
+  }
+}

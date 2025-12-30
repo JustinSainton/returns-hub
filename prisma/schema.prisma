@@ -1,0 +1,155 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Session {
+  id                  String    @id
+  shop                String
+  state               String
+  isOnline            Boolean   @default(false)
+  scope               String?
+  expires             DateTime?
+  accessToken         String
+  userId              BigInt?
+  firstName           String?
+  lastName            String?
+  email               String?
+  accountOwner        Boolean   @default(false)
+  locale              String?
+  collaborator        Boolean?  @default(false)
+  emailVerified       Boolean?  @default(false)
+  refreshToken        String?
+  refreshTokenExpires DateTime?
+}
+
+model ShopSettings {
+  id                    String   @id @default(cuid())
+  shop                  String   @unique
+  returnWindowDays      Int      @default(30)
+  autoApproveEnabled    Boolean  @default(false)
+  autoApproveMaxValue   Float?
+  requirePhotos         Boolean  @default(false)
+  requireReason         Boolean  @default(true)
+  restockAutomatically  Boolean  @default(false)
+  notifyOnNewReturn     Boolean  @default(true)
+  notifyOnStatusChange  Boolean  @default(true)
+  shippoApiKey          String?
+  easypostApiKey        String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  returnRequests   ReturnRequest[]
+  routingRules     RoutingRule[]
+  destinations     ReturnDestination[]
+}
+
+model ReturnRequest {
+  id                  String        @id @default(cuid())
+  shop                String
+  shopifyOrderId      String
+  shopifyOrderName    String
+  customerEmail       String
+  customerName        String
+  status              String        @default("pending")
+  reason              String?
+  customerNotes       String?
+  merchantNotes       String?
+  totalRefundAmount   Float         @default(0)
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+  approvedAt          DateTime?
+  completedAt         DateTime?
+
+  shopSettings ShopSettings @relation(fields: [shop], references: [shop])
+  items        ReturnItem[]
+  label        ShippingLabel?
+
+  @@index([shop])
+  @@index([status])
+  @@index([shopifyOrderId])
+}
+
+model ReturnItem {
+  id                  String   @id @default(cuid())
+  returnRequestId     String
+  shopifyLineItemId   String
+  shopifyVariantId    String?
+  shopifyProductId    String?
+  title               String
+  variantTitle        String?
+  sku                 String?
+  quantity            Int
+  pricePerItem        Float
+  reason              String?
+  condition           String?
+  photoUrls           String?
+  restocked           Boolean  @default(false)
+  restockedAt         DateTime?
+  createdAt           DateTime @default(now())
+
+  returnRequest ReturnRequest @relation(fields: [returnRequestId], references: [id], onDelete: Cascade)
+
+  @@index([returnRequestId])
+}
+
+model RoutingRule {
+  id              String   @id @default(cuid())
+  shop            String
+  name            String
+  priority        Int      @default(0)
+  isActive        Boolean  @default(true)
+  conditionType   String
+  conditionValue  String
+  destinationId   String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  shopSettings ShopSettings      @relation(fields: [shop], references: [shop])
+  destination  ReturnDestination @relation(fields: [destinationId], references: [id])
+
+  @@index([shop])
+  @@index([priority])
+}
+
+model ReturnDestination {
+  id           String   @id @default(cuid())
+  shop         String
+  name         String
+  addressLine1 String
+  addressLine2 String?
+  city         String
+  state        String
+  postalCode   String
+  country      String   @default("US")
+  phone        String?
+  isDefault    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  shopSettings  ShopSettings  @relation(fields: [shop], references: [shop])
+  routingRules  RoutingRule[]
+
+  @@index([shop])
+}
+
+model ShippingLabel {
+  id                String   @id @default(cuid())
+  returnRequestId   String   @unique
+  carrier           String
+  trackingNumber    String?
+  trackingUrl       String?
+  labelUrl          String
+  labelPdfUrl       String?
+  shippoTransactionId String?
+  easypostShipmentId  String?
+  cost              Float?
+  createdAt         DateTime @default(now())
+
+  returnRequest ReturnRequest @relation(fields: [returnRequestId], references: [id], onDelete: Cascade)
+}

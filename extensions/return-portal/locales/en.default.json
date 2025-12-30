@@ -1,0 +1,67 @@
+{
+  "return_portal": {
+    "heading": "Start a Return",
+    "subheading": "Enter your order information below to initiate a return.",
+    "order_lookup": {
+      "order_number_label": "Order Number",
+      "order_number_placeholder": "e.g., #1001",
+      "email_label": "Email Address",
+      "email_placeholder": "email@example.com",
+      "find_order_button": "Find My Order",
+      "searching": "Searching..."
+    },
+    "order_details": {
+      "order_title": "Order {{ order_name }}",
+      "order_date": "Placed on {{ date }}",
+      "select_items": "Select Items to Return",
+      "quantity": "Qty: {{ quantity }}",
+      "select_reason": "Select a reason",
+      "add_notes": "Add notes (optional)",
+      "notes_placeholder": "Tell us more about why you're returning this item...",
+      "upload_photos": "Upload Photos",
+      "photos_hint": "(optional, max 3 photos)"
+    },
+    "reasons": {
+      "defective": "Defective or damaged",
+      "wrong_item": "Wrong item received",
+      "not_as_described": "Not as described",
+      "no_longer_needed": "No longer needed",
+      "wrong_size": "Wrong size",
+      "wrong_color": "Wrong color",
+      "better_price": "Found better price elsewhere",
+      "other": "Other"
+    },
+    "summary": {
+      "title": "Return Summary",
+      "items_selected": "{{ count }} item(s) selected",
+      "submit_button": "Submit Return Request",
+      "submitting": "Submitting...",
+      "back_button": "Back to Order"
+    },
+    "confirmation": {
+      "title": "Return Request Submitted",
+      "message": "Your return request has been submitted successfully. You will receive an email confirmation shortly.",
+      "return_id": "Return ID: {{ id }}",
+      "next_steps_title": "What's Next?",
+      "next_steps": [
+        "We will review your return request within 1-2 business days.",
+        "Once approved, you will receive a prepaid shipping label via email.",
+        "Pack your items securely and ship them using the provided label.",
+        "Your refund will be processed within 5-7 business days after we receive the items."
+      ],
+      "start_new_return": "Start Another Return"
+    },
+    "errors": {
+      "order_not_found": "We couldn't find an order with that information. Please check your order number and email.",
+      "no_items_selected": "Please select at least one item to return.",
+      "reason_required": "Please select a reason for each item you want to return.",
+      "submission_failed": "There was a problem submitting your return. Please try again.",
+      "outside_return_window": "This order is outside the return window.",
+      "already_returned": "This item has already been returned."
+    },
+    "policy": {
+      "link_text": "View Return Policy",
+      "window_notice": "Items can be returned within {{ days }} days of delivery."
+    }
+  }
+}

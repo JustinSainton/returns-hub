@@ -1,0 +1,45 @@
+api_version = "2024-10"
+
+[[extensions]]
+type = "theme"
+name = "Return Portal"
+handle = "return-portal"
+
+  [[extensions.blocks]]
+  type = "return-portal"
+  name = "Return Portal"
+  template = "blocks/return-portal.liquid"
+
+[extensions.capabilities]
+ajax_api = true
+
+[extensions.settings]
+  [[extensions.settings.fields]]
+  key = "heading"
+  type = "text"
+  label = "Heading"
+  default = "Start a Return"
+
+  [[extensions.settings.fields]]
+  key = "subheading"
+  type = "text"
+  label = "Subheading"
+  default = "Enter your order information below to initiate a return."
+
+  [[extensions.settings.fields]]
+  key = "button_text"
+  type = "text"
+  label = "Button Text"
+  default = "Find My Order"
+
+  [[extensions.settings.fields]]
+  key = "primary_color"
+  type = "color"
+  label = "Primary Color"
+  default = "#000000"
+
+  [[extensions.settings.fields]]
+  key = "show_return_policy"
+  type = "checkbox"
+  label = "Show Return Policy Link"
+  default = true
