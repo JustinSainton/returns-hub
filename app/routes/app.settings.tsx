@@ -11,6 +11,9 @@ import {
   Checkbox,
   Banner,
   Divider,
+  RangeSlider,
+  InlineStack,
+  Box,
 } from "@shopify/polaris";
 import { TitleBar, useAppBridge } from "@shopify/app-bridge-react";
 import { useState, useEffect } from "react";
@@ -39,6 +42,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const notifyOnStatusChange = formData.get("notifyOnStatusChange") === "true";
   const shippoApiKey = (formData.get("shippoApiKey") as string) || null;
   const easypostApiKey = (formData.get("easypostApiKey") as string) || null;
+  const storeCreditEnabled = formData.get("storeCreditEnabled") === "true";
+  const storeCreditBonusPercent = parseInt(formData.get("storeCreditBonusPercent") as string) || 10;
+  const storeCreditExpiryDays = formData.get("storeCreditExpiryDays")
+    ? parseInt(formData.get("storeCreditExpiryDays") as string)
+    : null;
+  const exchangeEnabled = formData.get("exchangeEnabled") === "true";
+  const shopNowExchangeEnabled = formData.get("shopNowExchangeEnabled") === "true";
 
   await updateShopSettings(session.shop, {
     returnWindowDays,
@@ -51,6 +61,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     notifyOnStatusChange,
     shippoApiKey,
     easypostApiKey,
+    storeCreditEnabled,
+    storeCreditBonusPercent,
+    storeCreditExpiryDays,
+    exchangeEnabled,
+    shopNowExchangeEnabled,
   });
 
   return json({ success: true });
@@ -83,6 +98,13 @@ export default function Settings() {
   const [notifyOnStatusChange, setNotifyOnStatusChange] = useState(settings.notifyOnStatusChange);
   const [shippoApiKey, setShippoApiKey] = useState(settings.shippoApiKey || "");
   const [easypostApiKey, setEasypostApiKey] = useState(settings.easypostApiKey || "");
+  const [storeCreditEnabled, setStoreCreditEnabled] = useState(settings.storeCreditEnabled);
+  const [storeCreditBonusPercent, setStoreCreditBonusPercent] = useState(settings.storeCreditBonusPercent);
+  const [storeCreditExpiryDays, setStoreCreditExpiryDays] = useState(
+    settings.storeCreditExpiryDays?.toString() || ""
+  );
+  const [exchangeEnabled, setExchangeEnabled] = useState(settings.exchangeEnabled);
+  const [shopNowExchangeEnabled, setShopNowExchangeEnabled] = useState(settings.shopNowExchangeEnabled);
 
   const isSubmitting = fetcher.state === "submitting";
 
@@ -106,6 +128,11 @@ export default function Settings() {
         notifyOnStatusChange: notifyOnStatusChange.toString(),
         shippoApiKey,
         easypostApiKey,
+        storeCreditEnabled: storeCreditEnabled.toString(),
+        storeCreditBonusPercent: storeCreditBonusPercent.toString(),
+        storeCreditExpiryDays,
+        exchangeEnabled: exchangeEnabled.toString(),
+        shopNowExchangeEnabled: shopNowExchangeEnabled.toString(),
       },
       { method: "POST" }
     );
@@ -185,6 +212,76 @@ export default function Settings() {
                 onChange={setRestockAutomatically}
                 helpText="Add inventory back when returns are completed"
               />
+            </BlockStack>
+          </Card>
+        </Layout.AnnotatedSection>
+
+        <Layout.AnnotatedSection
+          id="storeCredit"
+          title="Store Credit & Exchanges"
+          description="Encourage customers to keep value in your store instead of requesting refunds."
+        >
+          <Card>
+            <BlockStack gap="400">
+              <Checkbox
+                label="Enable store credit option"
+                checked={storeCreditEnabled}
+                onChange={setStoreCreditEnabled}
+                helpText="Offer customers store credit as an alternative to refunds"
+              />
+              {storeCreditEnabled && (
+                <>
+                  <BlockStack gap="200">
+                    <InlineStack align="space-between">
+                      <Text as="span" variant="bodyMd">
+                        Bonus credit percentage
+                      </Text>
+                      <Text as="span" variant="bodyMd" fontWeight="semibold">
+                        {storeCreditBonusPercent}%
+                      </Text>
+                    </InlineStack>
+                    <RangeSlider
+                      label="Bonus percentage"
+                      labelHidden
+                      value={storeCreditBonusPercent}
+                      onChange={(value) => setStoreCreditBonusPercent(value as number)}
+                      min={0}
+                      max={25}
+                      step={5}
+                      output
+                    />
+                    <Text as="p" variant="bodySm" tone="subdued">
+                      Customers choosing store credit get {100 + storeCreditBonusPercent}% of their return value. 
+                      A $50 return becomes ${(50 * (1 + storeCreditBonusPercent / 100)).toFixed(2)} store credit.
+                    </Text>
+                  </BlockStack>
+                  <TextField
+                    label="Store credit expiry (days)"
+                    type="number"
+                    value={storeCreditExpiryDays}
+                    onChange={setStoreCreditExpiryDays}
+                    helpText="Leave empty for no expiration"
+                    autoComplete="off"
+                  />
+                </>
+              )}
+              <Divider />
+              <Checkbox
+                label="Enable exchanges"
+                checked={exchangeEnabled}
+                onChange={setExchangeEnabled}
+                helpText="Allow customers to exchange items for different products"
+              />
+              {exchangeEnabled && (
+                <Box paddingInlineStart="600">
+                  <Checkbox
+                    label="Enable 'Shop Now' exchanges"
+                    checked={shopNowExchangeEnabled}
+                    onChange={setShopNowExchangeEnabled}
+                    helpText="Let customers browse your entire catalog during exchange (not just swap sizes)"
+                  />
+                </Box>
+              )}
             </BlockStack>
           </Card>
         </Layout.AnnotatedSection>

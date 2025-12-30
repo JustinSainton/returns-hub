@@ -62,6 +62,11 @@ export async function updateShopSettings(
     notifyOnStatusChange: boolean;
     shippoApiKey: string | null;
     easypostApiKey: string | null;
+    storeCreditEnabled: boolean;
+    storeCreditBonusPercent: number;
+    storeCreditExpiryDays: number | null;
+    exchangeEnabled: boolean;
+    shopNowExchangeEnabled: boolean;
   }>
 ) {
   return db.shopSettings.upsert({

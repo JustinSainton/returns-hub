@@ -3,9 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Session {
@@ -29,20 +28,27 @@ model Session {
 }
 
 model ShopSettings {
-  id                    String   @id @default(cuid())
-  shop                  String   @unique
-  returnWindowDays      Int      @default(30)
-  autoApproveEnabled    Boolean  @default(false)
-  autoApproveMaxValue   Float?
-  requirePhotos         Boolean  @default(false)
-  requireReason         Boolean  @default(true)
-  restockAutomatically  Boolean  @default(false)
-  notifyOnNewReturn     Boolean  @default(true)
-  notifyOnStatusChange  Boolean  @default(true)
-  shippoApiKey          String?
-  easypostApiKey        String?
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  id                      String   @id @default(cuid())
+  shop                    String   @unique
+  returnWindowDays        Int      @default(30)
+  autoApproveEnabled      Boolean  @default(false)
+  autoApproveMaxValue     Float?
+  requirePhotos           Boolean  @default(false)
+  requireReason           Boolean  @default(true)
+  restockAutomatically    Boolean  @default(false)
+  notifyOnNewReturn       Boolean  @default(true)
+  notifyOnStatusChange    Boolean  @default(true)
+  shippoApiKey            String?
+  easypostApiKey          String?
+  // Store Credit settings
+  storeCreditEnabled      Boolean  @default(true)
+  storeCreditBonusPercent Int      @default(10)
+  storeCreditExpiryDays   Int?
+  // Exchange settings
+  exchangeEnabled         Boolean  @default(true)
+  shopNowExchangeEnabled  Boolean  @default(true)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 
   returnRequests   ReturnRequest[]
   routingRules     RoutingRule[]
@@ -61,6 +67,16 @@ model ReturnRequest {
   customerNotes       String?
   merchantNotes       String?
   totalRefundAmount   Float         @default(0)
+  // Resolution type: refund, store_credit, exchange
+  resolutionType      String?
+  // Exchange fields
+  exchangeType        String?       // variant, product, shop_now
+  exchangeOrderId     String?       // Shopify draft/order ID for exchange
+  exchangeValueUsed   Float?        // Amount of return value applied to exchange
+  exchangeBonusApplied Float?       // Bonus credit applied (if any)
+  // Store credit fields
+  storeCreditIssued   Float?        // Amount of store credit issued
+  storeCreditCode     String?       // Gift card code
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
   approvedAt          DateTime?

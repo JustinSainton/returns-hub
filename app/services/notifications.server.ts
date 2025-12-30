@@ -391,6 +391,112 @@ export async function sendReturnCompleted(data: ReturnNotificationData): Promise
   return sendEmail(data.returnRequest.customerEmail, email.subject, email.html, email.text);
 }
 
+export interface StoreCreditNotificationData {
+  customerEmail: string;
+  customerName: string;
+  shopName: string;
+  orderName: string;
+  giftCardCode: string;
+  creditAmount: number;
+  bonusAmount: number;
+  expiresOn?: string;
+}
+
+function generateStoreCreditEmail(data: StoreCreditNotificationData): {
+  subject: string;
+  html: string;
+  text: string;
+} {
+  const { customerName, shopName, orderName, giftCardCode, creditAmount, bonusAmount, expiresOn } = data;
+  const totalCredit = creditAmount + bonusAmount;
+  const expiryText = expiresOn ? `\n\nThis store credit expires on ${expiresOn}.` : "";
+  const expiryHtml = expiresOn
+    ? `<p style="color: #666; font-size: 14px;">This store credit expires on ${expiresOn}.</p>`
+    : "";
+
+  return {
+    subject: `Your Store Credit is Ready - ${formatCurrency(totalCredit)}`,
+    text: `
+Your Store Credit is Ready!
+
+Hi ${customerName},
+
+Great news! Your store credit for return ${orderName} has been issued.
+
+Store Credit Code: ${giftCardCode}
+Credit Amount: ${formatCurrency(creditAmount)}
+${bonusAmount > 0 ? `Bonus Credit: ${formatCurrency(bonusAmount)} (Thank you for choosing store credit!)` : ""}
+Total Available: ${formatCurrency(totalCredit)}
+${expiryText}
+
+How to use your store credit:
+1. Add items to your cart at ${shopName}
+2. At checkout, enter your gift card code: ${giftCardCode}
+3. The credit will be applied to your order
+
+Thank you for shopping with ${shopName}!
+    `.trim(),
+    html: `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <h1 style="color: #22c55e; font-size: 24px; margin-bottom: 20px;">Your Store Credit is Ready!</h1>
+  
+  <p>Hi ${customerName},</p>
+  
+  <p>Great news! Your store credit for return <strong>${orderName}</strong> has been issued.</p>
+  
+  <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 24px; border-radius: 12px; margin: 24px 0; color: #fff; text-align: center;">
+    <p style="margin: 0 0 8px; font-size: 14px; opacity: 0.9;">Your Store Credit Code</p>
+    <p style="margin: 0; font-size: 28px; font-weight: bold; letter-spacing: 2px; font-family: monospace;">${giftCardCode}</p>
+  </div>
+  
+  <div style="background: #f8f8f8; padding: 16px; border-radius: 8px; margin: 20px 0;">
+    <table style="width: 100%;">
+      <tr>
+        <td style="padding: 8px 0;">Credit Amount:</td>
+        <td style="padding: 8px 0; text-align: right; font-weight: 600;">${formatCurrency(creditAmount)}</td>
+      </tr>
+      ${bonusAmount > 0 ? `
+      <tr>
+        <td style="padding: 8px 0; color: #22c55e;">Bonus Credit:</td>
+        <td style="padding: 8px 0; text-align: right; font-weight: 600; color: #22c55e;">+${formatCurrency(bonusAmount)}</td>
+      </tr>
+      ` : ""}
+      <tr style="border-top: 2px solid #ddd;">
+        <td style="padding: 12px 0; font-size: 18px; font-weight: 600;">Total Available:</td>
+        <td style="padding: 12px 0; text-align: right; font-size: 18px; font-weight: 600;">${formatCurrency(totalCredit)}</td>
+      </tr>
+    </table>
+  </div>
+  
+  ${bonusAmount > 0 ? `<p style="color: #22c55e; font-weight: 500;">Thank you for choosing store credit! You received an extra ${formatCurrency(bonusAmount)} bonus.</p>` : ""}
+  
+  ${expiryHtml}
+  
+  <h2 style="font-size: 18px; margin-top: 24px;">How to use your store credit</h2>
+  <ol style="padding-left: 20px;">
+    <li>Add items to your cart at ${shopName}</li>
+    <li>At checkout, enter your gift card code: <strong>${giftCardCode}</strong></li>
+    <li>The credit will be applied to your order</li>
+  </ol>
+  
+  <p style="margin-top: 24px; color: #666;">Thank you for shopping with ${shopName}!</p>
+</body>
+</html>
+    `.trim(),
+  };
+}
+
+export async function sendStoreCreditNotification(data: StoreCreditNotificationData): Promise<boolean> {
+  const email = generateStoreCreditEmail(data);
+  return sendEmail(data.customerEmail, email.subject, email.html, email.text);
+}
+
 export async function notifyMerchantNewReturn(
   merchantEmail: string,
   data: ReturnNotificationData

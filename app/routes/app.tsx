@@ -25,6 +25,7 @@ export default function App() {
           Dashboard
         </Link>
         <Link to="/app/returns">Returns</Link>
+        <Link to="/app/analytics">Analytics</Link>
         <Link to="/app/routing-rules">Routing</Link>
         <Link to="/app/settings">Settings</Link>
       </NavMenu>
