@@ -1,6 +1,7 @@
 api_version = "2024-10"
 
 [[extensions]]
+uid = "d026b65c-9ce3-7495-3804-6c5bda1687d966d218a0"
 type = "theme"
 name = "Return Portal"
 handle = "return-portal"
